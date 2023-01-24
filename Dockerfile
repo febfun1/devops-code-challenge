@@ -1,10 +1,6 @@
 FROM node:14
 
-COPY . .
-
-RUN ls
-
-RUN ls /usr/app
+COPY package*.json ./
 
 WORKDIR /app/backend
 
