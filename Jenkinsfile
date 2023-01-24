@@ -1,68 +1,51 @@
 pipeline {
     agent any
   
-    //create dockerhub credential in github with your dockerhub Username and Password/Token
     environment {
-      DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+	    DOCKERHUB_CREDENTIALS=credentials('dockerhub')
     }
-    
-    stages {
-      
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/febfun1/devops-code-challenge.git'
-            }
-        }
-      
-        stage('Build Backend') {
-            steps {
-                sh 'cd backend && npm install'
-                sh 'cd ..'
-            }
-        }
-        stage('Build Frontend') {
-            steps {
-                sh 'cd frontend && npm install && npm run build'
-                sh 'cd ..'
-            }
-        }
-        stage('Build Images') {
-            steps {
-                sh 'docker-compose build'
-            }
-        }
-        
-        stage('Login') {
-		
-              steps {
-                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login --username febfun --password-stdin'    
-              }
-		    }
-        
-     //   stage('Push') {
 
-     //         steps {
-     //            sh 'docker push febfun/frontendapp:${BUILD_NUMBER}'
-     //         }
-     //   }
-        
-        stage('Push Images to Registry') {
+    stages {
+      stage('Checkout Code') {
             steps {
-                sh 'docker-compose push backend'
-		sh 'docker-compose push frontend'
+                // Checkout the code from the repository
+                git url: 'https://github.com/febfun1/finalclassreview.git'
             }
         }
-        stage('Deploy') {
+	    
+	stage('Build Backend') {
             steps {
-                sh 'docker-compose up -d'
+		sh 'cd backend && npm ci && npm install'
+                sh 'cd ..'
+            }
+        }
+	    
+	stage('Build Frontend') {
+            steps {
+		sh 'cd frontend && npm ci && npm install && npm run build'
+                sh 'cd ..'
+            }
+        }
+	
+	stage('Create Docker Image') {
+	    steps {
+		sh 'docker build -t febfun/image:$BUILD_NUMBER .'
+	    }
+	}
+	    
+        //stage('Build') {
+        //    steps{
+        //        sh 'docker-compose build'
+        //    }
+       // }
+        stage('Push') {
+            steps {
+              withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                //sh 'docker-compose push myapp'
+		sh 'docker push febfun/image:$BUILD_NUMBER'
+              }
             }
         }
     }
-    
-    post {
-        always {
-	    //cleanWs()
-      	sh 'docker logout'
-        }
-   }
-}
+} 
