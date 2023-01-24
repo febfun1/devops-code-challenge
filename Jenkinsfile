@@ -33,11 +33,11 @@ pipeline {
 	    }
 	}
 	    
-        //stage('Build') {
-        //    steps{
-        //        sh 'docker-compose build'
-        //    }
-       // }
+        stage('Build') {
+           steps{
+                sh 'docker-compose build'
+          }
+        }
         stage('Push') {
             steps {
               withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
