@@ -1,6 +1,6 @@
 FROM node:14
 
-COPY . /app
+RUN mkdir -p /app
 
 WORKDIR /app/backend
 
