@@ -31,11 +31,7 @@ pipeline {
 	    steps {
 		sh 'docker build -t febfun/appimage:$BUILD_NUMBER .'
 	    }
-	}
-	    
-         //stage('Build') {
-           //steps{
-             //sh 'docker-compose build'
+	
           }
         }
         stage('Push') {
