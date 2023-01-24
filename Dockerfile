@@ -1,8 +1,8 @@
 FROM node:14
 
-#COPY . .
+COPY . /app
 
-WORKDIR /app/backend
+WORKDIR . .
 
 RUN npm install
 
@@ -17,5 +17,5 @@ EXPOSE 3000
 #CMD ["npm", "build"]
 #CMD ["npm", "start"]
 
-WORKDIR /app/backend
+WORKDIR . .
 CMD ["sh", "-c", "npm run start & cd /app/frontend && npm run start"]
