@@ -1,6 +1,6 @@
 FROM node:14
 
-COPY . .
+#COPY . .
 
 WORKDIR /app/backend
 
