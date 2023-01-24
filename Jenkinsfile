@@ -10,7 +10,7 @@ pipeline {
       
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/adeoyedewale/BackendandFrontend.git'
+                git url: 'https://github.com/febfun1/devops-code-challenge.git'
             }
         }
       
