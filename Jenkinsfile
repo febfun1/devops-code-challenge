@@ -29,7 +29,7 @@ pipeline {
 	
 	stage('Create Docker Image') {
 	    steps {
-		sh 'docker build -t febfun/image:$BUILD_NUMBER .'
+		sh 'docker build -t febfun/image2:$BUILD_NUMBER .'
 	    }
 	}
 	    
@@ -43,7 +43,7 @@ pipeline {
               withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                 sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                 //sh 'docker-compose push myapp'
-		sh 'docker push febfun/image:$BUILD_NUMBER'
+		sh 'docker push febfun/image2:$BUILD_NUMBER'
               }
             }
         }
